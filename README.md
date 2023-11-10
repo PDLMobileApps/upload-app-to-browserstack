@@ -1,6 +1,6 @@
-# upload-app-to-app-live-browserstack action
+# upload-app-to-browserstack action
 
-This action helps you upload your app to App Live BrowserStack.
+This action helps you upload your app to BrowserStack: App Live and App Automate.
 
 ## Inputs
 
@@ -26,15 +26,19 @@ This action helps you upload your app to App Live BrowserStack.
 
 ## Outputs
 
-### `browserstack-app-url`
+### `browserstack-app-live-url`
 
-The url for the app uploaded.
+The url of the app live uploaded.
+
+### `browserstack-app-automate-url`
+
+The url of the app automate uploaded.
 
 ## Example usage
 
 ```
-- name: Upload APK to APP Live BrowserStack
-  uses: Gildofj/upload-app-to-app-live-browserstack@master
+- name: Upload APK to BrowserStack: App Live and App Automate
+  uses: PDLMobileApps/upload-app-to-browserstack
   with:
     app-path: /path-to-apk/app.apk
     browserstack-username: ${{ secrets.BROWSERSTACK_USERNAME }}

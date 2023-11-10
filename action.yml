@@ -26,8 +26,10 @@ inputs:
     required: false
     default: undefined
 outputs:
-  browserstack-app-url: # browserstack app url
-    description: "The browserstack app url uploaded"
+  browserstack-app-live-url: # browserstack app live url
+    description: "The browserstack app live url of the uploaded app"
+  browserstack-app-automate-url: # browserstack app automate url
+    description: "The browserstack app automate url of the uploaded app"
 runs:
   using: "node16"
   main: "build/index.js"

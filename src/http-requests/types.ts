@@ -10,7 +10,7 @@ export type RemoveAppProps = {
   appId: string,
 }
 
-export type AppLive = {
+export type App = {
   app_name: string,
   app_version: string,
   app_url: string,
@@ -18,7 +18,7 @@ export type AppLive = {
   uploaded_at: string,
 }
 
-export type InitializeApiAppLiveProps = {
+export type InitializeApiAppProps = {
   username: string,
   password: string
 }

@@ -1,7 +1,8 @@
 import * as core from "@actions/core";
 import * as github from "@actions/github";
 
-import { getRecentApps, initializeApiAppLive, removeApp, uploadApp } from "./http-requests/app-live";
+import { getRecentAppsLive, initializeApiAppLive, removeAppLive, uploadAppLive } from "./http-requests/app-live";
+import { getRecentAppsAutomate, initializeApiAppAutomate, removeAppAutomate, uploadAppAutomate } from "./http-requests/app-automate";
 
 export async function run() {
   try {
@@ -19,22 +20,39 @@ export async function run() {
 
     if (appPath !== 'undefined' && bsUserName !== 'undefined' && bsAccessKey !== 'undefined') {
       initializeApiAppLive({ username: bsUserName, password: bsAccessKey });
+      initializeApiAppAutomate({ username: bsUserName, password: bsAccessKey });
+      
       console.log(`appPath -  ${appPath}!`);
+
       const appToReplace = core.getInput("app-to-replace");
       if (appToReplace) {
-        const apps = await getRecentApps();
-        if (apps && apps.length > 0) {
-          const app = apps.find(app => app.app_name === appToReplace);
+        // App Live
+        const appsLive = await getRecentAppsLive();
+        if (appsLive && appsLive.length > 0) {
+          const app = appsLive.find(app => app.app_name === appToReplace);
 
           if (app)
-            await removeApp({ appId: app.app_id });
+            await removeAppLive({ appId: app.app_id });
           else
-            console.log("Reported app-to-replace not found for the user in question reported not found for the user in question!");
+            console.log("App Live - Reported app-to-replace not found for the user!");
+        }
+
+        // App Automate
+        const appsAutomate = await getRecentAppsAutomate();
+        if (appsAutomate && appsAutomate.length > 0) {
+          const app = appsAutomate.find(app => app.app_name === appToReplace);
+
+          if (app)
+            await removeAppAutomate({ appId: app.app_id });
+          else
+            console.log("App Automate - Reported app-to-replace not found for the user!");
         }
       }
 
-      await uploadApp({ appPath });
+      await uploadAppLive({ appPath });
+      await uploadAppAutomate({ appPath });
     }
+
     // Get the JSON webhook payload for the event that triggered the workflow
     const payload = JSON.stringify(github.context.payload, undefined, 2)
     console.log(`The event payload: ${payload}`);
