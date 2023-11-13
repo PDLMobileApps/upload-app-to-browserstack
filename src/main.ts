@@ -19,33 +19,39 @@ export async function run() {
       core.setFailed('browserstack-accesskey is required');
 
     if (appPath !== 'undefined' && bsUserName !== 'undefined' && bsAccessKey !== 'undefined') {
+      console.log(`appPath: ${appPath}`);
+      console.log(`bsUserName: ${bsUserName}`);
+      console.log(`bsAccessKey: ${bsAccessKey}`);
+
       initializeApiAppLive({ username: bsUserName, password: bsAccessKey });
       initializeApiAppAutomate({ username: bsUserName, password: bsAccessKey });
       
-      console.log(`appPath - ${appPath}!`);
-
       const appToReplace = core.getInput("app-to-replace");
       if (appToReplace !== 'undefined') {
+        console.log(`appToReplace: ${appToReplace}`);
+
         // App Live
         const appsLive = await getRecentAppsLive();
         if (appsLive && appsLive.length > 0) {
-          const app = appsLive.find(app => app.app_name === appToReplace);
+          console.log(`appsLive: ${appsLive}`);
 
+          const app = appsLive.find(app => app.app_name === appToReplace);
           if (app)
             await removeAppLive({ appId: app.app_id });
           else
-            console.log("App Live - Reported app-to-replace not found for the user!");
+            console.log("App Live - Reported app-to-replace not found for the user");
         }
 
         // App Automate
         const appsAutomate = await getRecentAppsAutomate();
         if (appsAutomate && appsAutomate.length > 0) {
-          const app = appsAutomate.find(app => app.app_name === appToReplace);
+          console.log(`appsAutomate: ${appsAutomate}`);
 
+          const app = appsAutomate.find(app => app.app_name === appToReplace);
           if (app)
             await removeAppAutomate({ appId: app.app_id });
           else
-            console.log("App Automate - Reported app-to-replace not found for the user!");
+            console.log("App Automate - Reported app-to-replace not found for the user");
         }
       }
 
