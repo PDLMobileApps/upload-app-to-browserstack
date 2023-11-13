@@ -22,10 +22,10 @@ export async function run() {
       initializeApiAppLive({ username: bsUserName, password: bsAccessKey });
       initializeApiAppAutomate({ username: bsUserName, password: bsAccessKey });
       
-      console.log(`appPath -  ${appPath}!`);
+      console.log(`appPath - ${appPath}!`);
 
       const appToReplace = core.getInput("app-to-replace");
-      if (appToReplace) {
+      if (appToReplace !== 'undefined') {
         // App Live
         const appsLive = await getRecentAppsLive();
         if (appsLive && appsLive.length > 0) {
