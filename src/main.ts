@@ -6,19 +6,19 @@ import { getRecentAppsAutomate, initializeApiAppAutomate, removeAppAutomate, upl
 
 export async function run() {
   try {
-    const appPath = core.getInput('app-path');
-    if (appPath === 'undefined')
+    const appPath = core.getInput('app-path', { required: true });
+    if (appPath === '')
       core.setFailed('app-path is required');
 
-    const bsUserName = core.getInput('browserstack-username');
-    if (bsUserName === 'undefined')
+    const bsUserName = core.getInput('browserstack-username', { required: true });
+    if (bsUserName === '')
       core.setFailed('browserstack-username is required');
 
-    const bsAccessKey = core.getInput('browserstack-accesskey');
-    if (bsAccessKey === 'undefined')
+    const bsAccessKey = core.getInput('browserstack-accesskey', { required: true });
+    if (bsAccessKey === '')
       core.setFailed('browserstack-accesskey is required');
 
-    if (appPath !== 'undefined' && bsUserName !== 'undefined' && bsAccessKey !== 'undefined') {
+    if (appPath !== '' && bsUserName !== '' && bsAccessKey !== '') {
       console.log(`appPath: ${appPath}`);
       console.log(`bsUserName: ${bsUserName}`);
       console.log(`bsAccessKey: ${bsAccessKey}`);
@@ -26,14 +26,14 @@ export async function run() {
       initializeApiAppLive({ username: bsUserName, password: bsAccessKey });
       initializeApiAppAutomate({ username: bsUserName, password: bsAccessKey });
       
-      const appToReplace = core.getInput("app-to-replace");
-      if (appToReplace !== 'undefined') {
+      const appToReplace = core.getInput("app-to-replace", { required: false });
+      if (appToReplace !== '') {
         console.log(`appToReplace: ${appToReplace}`);
 
         // App Live
         const appsLive = await getRecentAppsLive();
         if (appsLive && appsLive.length > 0) {
-          console.log(`appsLive: ${appsLive}`);
+          // console.log(`appsLive: ${appsLive}`);
 
           const app = appsLive.find(app => app.app_name === appToReplace);
           if (app)
@@ -45,7 +45,7 @@ export async function run() {
         // App Automate
         const appsAutomate = await getRecentAppsAutomate();
         if (appsAutomate && appsAutomate.length > 0) {
-          console.log(`appsAutomate: ${appsAutomate}`);
+          // console.log(`appsAutomate: ${appsAutomate}`);
 
           const app = appsAutomate.find(app => app.app_name === appToReplace);
           if (app)

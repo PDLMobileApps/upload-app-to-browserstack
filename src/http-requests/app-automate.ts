@@ -26,7 +26,8 @@ export async function uploadAppAutomate({ appPath }: UploadAppProps) {
     const customId = core.getInput('custom-id', { required: false });
     const form_data = new FormData();
     form_data.append("file", fs.createReadStream(appPath));
-    form_data.append("custom_id", customId);
+    if (customId !== '')
+      form_data.append("custom_id", customId);
     const response = await apiAppAutomate.post<UploadAppResponse>("/upload", form_data);
     core.setOutput("browserstack-app-automate-url", response.data.app_url);
   } catch (err) {

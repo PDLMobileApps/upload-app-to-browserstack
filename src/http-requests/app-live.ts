@@ -26,7 +26,8 @@ export async function uploadAppLive({ appPath }: UploadAppProps) {
     const customId = core.getInput('custom-id', { required: false });
     const form_data = new FormData();
     form_data.append("file", fs.createReadStream(appPath));
-    form_data.append("custom_id", customId);
+    if (customId !== '')
+      form_data.append("custom_id", customId);
     const response = await apiAppLive.post<UploadAppResponse>("/upload", form_data);
     core.setOutput("browserstack-app-live-url", response.data.app_url);
   } catch (err) {
