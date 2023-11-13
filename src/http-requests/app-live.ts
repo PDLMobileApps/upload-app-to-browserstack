@@ -23,12 +23,13 @@ export async function uploadAppLive({ appPath }: UploadAppProps) {
     if (!appPath)
       throw new Error("appPath is required for upload app");
 
+    const config = { headers: { "Content-Type": "multipart/form-data" } }
     const customId = core.getInput('custom-id', { required: false });
     const form_data = new FormData();
     form_data.append("file", fs.createReadStream(appPath));
-    if (customId !== '')
+    if (customId !== 'undefined' && customId !== '')
       form_data.append("custom_id", customId);
-    const response = await apiAppLive.post<UploadAppResponse>("/upload", form_data);
+    const response = await apiAppLive.post<UploadAppResponse>("/upload", form_data, config);
     core.setOutput("browserstack-app-live-url", response.data.app_url);
   } catch (err) {
     throw err as Error;

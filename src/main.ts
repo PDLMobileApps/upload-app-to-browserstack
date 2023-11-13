@@ -7,18 +7,18 @@ import { getRecentAppsAutomate, initializeApiAppAutomate, removeAppAutomate, upl
 export async function run() {
   try {
     const appPath = core.getInput('app-path', { required: true });
-    if (appPath === '')
+    if (!hasValue(appPath))
       core.setFailed('app-path is required');
 
     const bsUserName = core.getInput('browserstack-username', { required: true });
-    if (bsUserName === '')
+    if (!hasValue(bsUserName))
       core.setFailed('browserstack-username is required');
 
     const bsAccessKey = core.getInput('browserstack-accesskey', { required: true });
-    if (bsAccessKey === '')
+    if (!hasValue(bsAccessKey))
       core.setFailed('browserstack-accesskey is required');
 
-    if (appPath !== '' && bsUserName !== '' && bsAccessKey !== '') {
+    if (hasValue(appPath) && hasValue(bsUserName) && hasValue(bsAccessKey)) {
       console.log(`appPath: ${appPath}`);
       console.log(`bsUserName: ${bsUserName}`);
       console.log(`bsAccessKey: ${bsAccessKey}`);
@@ -27,7 +27,7 @@ export async function run() {
       initializeApiAppAutomate({ username: bsUserName, password: bsAccessKey });
       
       const appToReplace = core.getInput("app-to-replace", { required: false });
-      if (appToReplace !== '') {
+      if (hasValue(appToReplace)) {
         console.log(`appToReplace: ${appToReplace}`);
 
         // App Live
@@ -69,6 +69,10 @@ export async function run() {
       core.setFailed('Unknown error occurred.')
     }
   }
+}
+
+function hasValue(variable): boolean {
+  return variable !== 'undefined' && variable !== ''
 }
 
 void run();
