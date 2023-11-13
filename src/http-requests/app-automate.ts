@@ -23,13 +23,12 @@ export async function uploadAppAutomate({ appPath }: UploadAppProps) {
     if (!appPath)
       throw new Error("appPath is required for upload app");
 
-    const config = { headers: { "Content-Type": "multipart/form-data" } }
     const customId = core.getInput('custom-id', { required: false });
     const form_data = new FormData();
     form_data.append("file", fs.createReadStream(appPath));
     if (customId !== 'undefined' && customId !== '')
       form_data.append("custom_id", customId);
-    const response = await apiAppAutomate.post<UploadAppResponse>("/upload", form_data, config);
+    const response = await apiAppAutomate.postForm<UploadAppResponse>("/upload", form_data);
     core.setOutput("browserstack-app-automate-url", response.data.app_url);
   } catch (err) {
     throw err as Error;

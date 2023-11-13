@@ -71,7 +71,7 @@ export async function run() {
   }
 }
 
-function hasValue(variable): boolean {
+function hasValue(variable: string): boolean {
   return variable !== 'undefined' && variable !== ''
 }
 
